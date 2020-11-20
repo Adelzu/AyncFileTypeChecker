@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Threading.Tasks;
     using FileTypeChecker.Types;
     using NUnit.Framework;
 
@@ -103,24 +104,24 @@
 
         [Test]
         public void Is_ShouldThrowExceptionIfStreamIsNull()
-            => Assert.Catch<ArgumentNullException>(() => FileTypeValidator.Is<Bitmap>(null));
+            => Assert.Catch<ArgumentNullException>(() => FileTypeValidator.IsAsync<Bitmap>(null).GetAwaiter().GetResult());
 
         [Test]
-        public void Is_ShouldReturnTrueIfTheTypesMatch()
+        public async Task Is_ShouldReturnTrueIfTheTypesMatch()
         {
             using var fileStream = File.OpenRead("./files/test.bmp");
             var expected = true;
-            var actual = FileTypeValidator.Is<Bitmap>(fileStream);
+            var actual = await FileTypeValidator.IsAsync<Bitmap>(fileStream);
 
             Assert.AreEqual(expected, actual);
         }
 
         [Test]
-        public void Is_ShouldReturnFalseIfTypesDidNotMatch()
+        public async Task Is_ShouldReturnFalseIfTypesDidNotMatch()
         {
              using var fileStream = File.OpenRead("./files/test.bmp");
             var expected = false;
-            var actual = FileTypeValidator.Is<Gzip>(fileStream);
+            var actual = await FileTypeValidator.IsAsync<Gzip>(fileStream);
 
             Assert.AreEqual(expected, actual);
         }

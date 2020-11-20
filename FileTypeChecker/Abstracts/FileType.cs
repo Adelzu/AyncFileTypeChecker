@@ -3,6 +3,7 @@
     using System;
     using System.IO;
     using System.Linq;
+    using System.Threading.Tasks;
     using Common;
 
     public abstract class FileType : IFileType
@@ -69,7 +70,7 @@
         }
 
         /// <inheritdoc />
-        public bool DoesMatchWith(Stream stream, bool resetPosition = true)
+        public async Task<bool> DoesMatchWithAsync(Stream stream, bool resetPosition = true)
         {
             DataValidator.ThrowIfNull(stream, nameof(Stream));
 
@@ -84,7 +85,7 @@
             }
 
             var buffer = new byte[20];
-            stream.Read(buffer, 0, buffer.Length);
+            await stream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
             return DoesMatchWith(buffer);
         }
         

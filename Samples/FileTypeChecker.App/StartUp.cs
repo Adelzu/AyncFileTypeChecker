@@ -28,8 +28,8 @@
 
                 IFileType fileType = FileTypeValidator.GetFileType(fileStream);
                                 
-                Console.WriteLine("Is Image?: {0}", fileStream.IsImage());
-                Console.WriteLine("Is Bitmap?: {0}", fileStream.Is<Bitmap>());
+                Console.WriteLine("Is Image?: {0}", fileStream.IsImageAsync());
+                Console.WriteLine("Is Bitmap?: {0}", fileStream.IsAsync<Bitmap>());
                 Console.WriteLine("Type Name: {0}", fileType.Name);
                 Console.WriteLine("Type Extension: {0}", fileType.Extension);
                 Console.WriteLine(new string('=', 10));

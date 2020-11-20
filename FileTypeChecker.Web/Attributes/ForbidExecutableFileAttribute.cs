@@ -32,7 +32,7 @@
                 return new ValidationResult(this.UnsupportedFileErrorMessage);
             }
 
-            if (stream.Is<Executable>() || stream.Is<ExecutableAndLinkableFormat>())
+            if (stream.IsAsync<Executable>().ConfigureAwait(false).GetAwaiter().GetResult() || stream.IsAsync<ExecutableAndLinkableFormat>().ConfigureAwait(false).GetAwaiter().GetResult())
             {
                 return new ValidationResult(this.ErrorMessage ?? this.InvalidFileTypeErrorMessage);
             }

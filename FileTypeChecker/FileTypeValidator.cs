@@ -8,6 +8,7 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Provides you a method for file type validation.
@@ -55,7 +56,7 @@
         {
             DataValidator.ThrowIfNull(fileContent, nameof(Stream));
 
-            return Types.Any(type => type.DoesMatchWith(fileContent));
+            return Types.Any(type => type.DoesMatchWithAsync(fileContent).ConfigureAwait(false).GetAwaiter().GetResult());
         }
 
         /// <summary>
@@ -71,7 +72,7 @@
         {
             DataValidator.ThrowIfNull(fileContent, nameof(Stream));
 
-            return Types.SingleOrDefault(fileType => fileType.DoesMatchWith(fileContent));
+            return Types.SingleOrDefault(fileType => fileType.DoesMatchWithAsync(fileContent).ConfigureAwait(false).GetAwaiter().GetResult());
         }
 
         /// <summary>
@@ -92,23 +93,23 @@
         /// <typeparam name="T">Type that implements FileType</typeparam>
         /// <param name="fileContent">File as stream</param>
         /// <returns>True if file match the desired type otherwise returns false.</returns>
-        public static bool Is<T>(Stream fileContent) where T : FileType, IFileType
-            => fileContent.Is<T>();
+        public static async Task<bool> IsAsync<T>(Stream fileContent) where T : FileType, IFileType
+            => await fileContent.IsAsync<T>().ConfigureAwait(false);
          /// <summary>
         /// Validates that the current file is image.
         /// </summary>
         /// <param name="fileContent">File to check as stream.</param>
         /// <returns>Returns true if the provided file is image otherwise returns false. Supported image types are: Bitmap, JPEG, GIF and PNG.</returns>
 
-        public static bool IsImage(Stream fileContent)
-            => fileContent.IsImage();
+        public static async Task<bool> IsImageAsync(Stream fileContent)
+            => await fileContent.IsImageAsync().ConfigureAwait(false);
         /// <summary>
         /// Validates that the current file is archive.
         /// </summary>
         /// <param name="fileContent"File to check as stream.></param>
         /// <returns>Returns true if the provided file is archive otherwise returns false. Supported archive types are: Extensible archive, Gzip, Rar, 7Zip, Tar and Zip.</returns>
-        public static bool IsArchive(Stream fileContent)
-            => fileContent.IsArchive();
+        public static async Task<bool> IsArchiveAsync(Stream fileContent)
+            => await fileContent.IsArchiveAsync().ConfigureAwait(false);
 
         private static IEnumerable<IFileType> GetTypesInstance(Assembly assembly)
             => assembly.GetTypes()

@@ -1,6 +1,7 @@
 ﻿namespace FileTypeChecker.Abstracts
 {
     using System.IO;
+    using System.Threading.Tasks;
 
     public interface IFileType
     {
@@ -24,6 +25,6 @@
         /// <exception cref="System.ArgumentNullException"></exception>
         /// <exception cref="System.NotSupportedException"></exception>
         /// <exception cref="System.ObjectDisposedException"></exception>
-        bool DoesMatchWith(Stream stream, bool resetPosition = true);
+        Task<bool> DoesMatchWithAsync(Stream stream, bool resetPosition = true);
     }
 }

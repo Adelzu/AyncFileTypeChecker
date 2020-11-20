@@ -32,7 +32,7 @@
                 return new ValidationResult(this.UnsupportedFileErrorMessage);
             }
 
-            if (!stream.IsImage())
+            if (!stream.IsImageAsync().ConfigureAwait(false).GetAwaiter().GetResult())
             {
                 return new ValidationResult(this.ErrorMessage ?? this.InvalidFileTypeErrorMessage);
             }

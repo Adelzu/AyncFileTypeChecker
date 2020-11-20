@@ -4,6 +4,7 @@
     using Microsoft.AspNetCore.Http;
     using System.ComponentModel.DataAnnotations;
     using System.IO;
+    using System.Threading.Tasks;
 
     public class AllowArchiveOnlyAttribute : FileTypeValidationBaseAttribute
     {
@@ -31,7 +32,7 @@
                 return new ValidationResult(this.UnsupportedFileErrorMessage);
             }
 
-            if (!stream.IsArchive())
+            if (!stream.IsArchiveAsync().ConfigureAwait(false).GetAwaiter().GetResult())
             {
                 return new ValidationResult(this.ErrorMessage ?? this.InvalidFileTypeErrorMessage);
             }
